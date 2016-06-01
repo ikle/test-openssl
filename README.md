@@ -1,16 +1,19 @@
-=== Generate RSA key pair
+# Generate RSA key pair
 
+```
 $ openssl genpkey -algorithm rsa -out privkey.pem
 ....................++++++
 ..........................++++++
 $ openssl rsa -in privkey.pem -pubout -out pubkey.pem
 writing RSA key
 $
+```
 
-=== Sign and verify
+# Sign and verify
 
+```
 $ ./evp-sign privkey.pem evp-sign.c > sign
-$ hd sign 
+$ hd sign
 00000000  36 4e 79 d8 df 8e df a1  ec 33 86 a2 7c fb 6c 14  |6Ny......3..|.l.|
 00000010  8d 56 a4 fa 5d 0b 85 fc  09 f2 97 5f d2 2a 84 4b  |.V..]......_.*.K|
 00000020  98 fa d1 7e e5 8e 56 d8  69 20 d6 7d 1a f1 d9 20  |...~..V.i .}... |
@@ -24,8 +27,9 @@ $ ./evp-verify pubkey.pem evp-sign.c < sign
 $ echo $?
 0
 $
+```
 
-=== Verify protocol
+# Verify protocol
 
 1. request 'file': filename and file descriptor to verify;
 2. request 'data': file offset and data chunk size to verify;
@@ -35,43 +39,41 @@ $
 6. file closed on accept or reject;
 7. any error condition equal to reject.
 
-== Use cases
+## Use cases
 
-= File required to verify
+### File required to verify
 
 1. in: file, out: continue;
-2. in: data, out: continue --- zero or more times;
+2. in: data, out: continue — zero or more times;
 3. in signature, out: accept or reject.
 
-= File matched by path should be accepted or rejected
+### File matched by path should be accepted or rejected
 
 1. in: file, out: accept or reject.
 
-== Kernel
+## Kernel
 
 Until public verification key is not loaded verification disabled (always
 accepted). Once key loaded it cannot be changed.
 
-== Userspace API
+## Userspace API
 
-New open flag O_VERIFY --- verification requested.
+New open flag O_VERIFY — verification requested.
 
 1. int open (const char *filename, O_VERIFY | ...): regular open + file request
-  a. ret >= 0 --- accept, verification does not required;
-  b. ret = -1, errno = EINVAL  --- writable mode requested alongside with
+  1. ret >= 0 — accept, verification does not required;
+  2. ret = -1, errno = EINVAL  — writable mode requested alongside with
      verification;
-  c. ret = -1, errno = EBUSY   --- file opened for writing already;
-  d. ret = -1, errno = EACCESS --- reject;
-  e. ret = -1, errno = EVERIFY --- continue (verification required), file 
+  3. ret = -1, errno = EBUSY   — file opened for writing already;
+  4. ret = -1, errno = EACCESS — reject;
+  5. ret = -1, errno = EVERIFY — continue (verification required), file
      locked for any modifications;
-  f. ret = -1, errno = any other open error.
+  6. ret = -1, errno = any other open error.
 2. int verify_update (int fd, loff_t offset, size_t size): data request
-  a. ret = 0 --- continue;
-  b. ret = -1 + errno = EACCESS --- reject (should never happen);
-  c. ret = -1, errno = EBADF, EIO or another system level error.
+  1. ret = 0 — continue;
+  2. ret = -1 + errno = EACCESS — reject (should never happen);
+  3. ret = -1, errno = EBADF, EIO or another system level error.
 3. int verify (int fd, loff_t offset, size_t size): signature request
-  a. ret = 0 --- accept;
-  b. ret = -1 + errno = EACCESS --- reject;
-  c. ret = -1, errno = EBADF, EIO or another system level error.
-
-
+  1. ret = 0 — accept;
+  2. ret = -1 + errno = EACCESS — reject;
+  3. ret = -1, errno = EBADF, EIO or another system level error.

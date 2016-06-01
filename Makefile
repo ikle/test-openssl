@@ -1,4 +1,4 @@
-TARGETS = evp-md5sum evp-bio-md5sum evp-sign evp-verify
+TARGETS = evp-md5sum evp-bio-md5sum evp-sign evp-verify bn
 
 all: $(TARGETS)
 
@@ -17,3 +17,5 @@ evp-md5sum evp-bio-md5sum: CFLAGS += $(OPENSSL_CFLAGS)
 evp-sign evp-verify: CFLAGS += $(OPENSSL_CFLAGS)
 evp-sign: crypto-sign.o
 evp-verify: crypto-verify.o
+
+bn: CFLAGS += $(OPENSSL_CFLAGS)

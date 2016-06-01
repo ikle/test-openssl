@@ -1,0 +1,7 @@
+*.o
+*.swp
+*.pem
+evp-bio-md5sum
+evp-md5sum
+evp-sign
+evp-verify

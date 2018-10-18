@@ -1,6 +1,7 @@
 *.o
 *.swp
 *.pem
+*.patch
 evp-bio-md5sum
 evp-md5sum
 evp-sign

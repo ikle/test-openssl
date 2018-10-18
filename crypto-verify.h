@@ -8,12 +8,12 @@
 
 struct pkey *pkey_read_public(const char *filename, const char *password);
 
-static void pkey_free(struct pkey *key)
+static inline void pkey_free(struct pkey *key)
 {
 	EVP_PKEY_free((void *) key);
 }
 
-static size_t pkey_size(struct pkey *key)
+static inline size_t pkey_size(struct pkey *key)
 {
 	return EVP_PKEY_size((void *) key);
 }
@@ -24,7 +24,8 @@ struct verify_ctx {
 
 int verify_init(struct verify_ctx *c, const char *digest);
 
-static int verify_update(struct verify_ctx *c, const void *data, size_t size)
+static inline
+int verify_update(struct verify_ctx *c, const void *data, size_t size)
 {
 	return EVP_VerifyUpdate(&c->c, data, size);
 }

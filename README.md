@@ -9,10 +9,20 @@ writing RSA key
 $
 ```
 
+# Generating GOST keys
+
+```
+$ openssl genpkey -algorithm gost2001 -pkeyopt paramset:A -out gost-privkey.pem
+$ openssl req -new -x509 -days 365 -key gost-privkey.pem -out gost-ca.pem \
+  -subj "/C=RU/ST=Russia/L=Spb/O=Ikle Org/OU=Ikle CA/CN=Ikle CA Root"
+$ openssl x509 -in gost-ca.pem -text -noout
+$ openssl x509 -inform pem -in gost-ca.pem -pubkey -noout > gost-pubkey.pem
+```
+
 # Sign and verify
 
 ```
-$ ./evp-sign privkey.pem evp-sign.c > sign
+$ ./evp-sign md5 privkey.pem evp-sign.c > sign
 $ hd sign
 00000000  36 4e 79 d8 df 8e df a1  ec 33 86 a2 7c fb 6c 14  |6Ny......3..|.l.|
 00000010  8d 56 a4 fa 5d 0b 85 fc  09 f2 97 5f d2 2a 84 4b  |.V..]......_.*.K|
@@ -23,10 +33,25 @@ $ hd sign
 00000060  34 69 24 f3 66 ff e2 f4  c4 d3 38 85 40 47 da c1  |4i$.f.....8.@G..|
 00000070  44 ab 3d af 24 6c 9e ec  2b 5e 25 01 ee 7d 77 a0  |D.=.$l..+^%..}w.|
 00000080
-$ ./evp-verify pubkey.pem evp-sign.c < sign
+$ ./evp-verify md5 pubkey.pem evp-sign.c < sign
 $ echo $?
 0
 $
+```
+
+# Sign and verify with GOST
+
+```
+$ ./evp-sign md_gost94 gost-privkey.pem evp-sign.c > sign
+$ hd sign
+00000000  3f 6a b0 2e e4 41 a4 ae  e1 f4 87 43 20 b0 4f b2  |?j...A.....C .O.|
+00000010  cd ee 09 b1 4c ad 58 fc  72 9a d5 89 19 d3 39 89  |....L.X.r.....9.|
+00000020  a2 50 73 c7 5d 63 7c c3  1e 6c d6 53 d5 64 81 cb  |.Ps.]c|..l.S.d..|
+00000030  a0 1e 0c 69 60 04 32 2e  30 e8 53 0e 2a 24 97 ad  |...i`.2.0.S.*$..|
+00000040
+$ ./evp-verify md_gost94 gost-pubkey.pem evp-sign.c < sign
+$ echo $?
+0
 ```
 
 # Verify protocol

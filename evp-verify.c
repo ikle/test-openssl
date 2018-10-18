@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
 	fclose(f);
 
 	if ((key = pkey_read_public(argv[1], "")) == NULL)
-		errx(1, "cannot open public key", argv[1]);
+		errx(1, "cannot open public key %s", argv[1]);
 
 	if ((sign = malloc(pkey_size(key))) == NULL)
-		err(1, "");
+		err(1, "cannot allocate key storage");
 
 	count = fread(sign, 1, pkey_size(key), stdin);
 

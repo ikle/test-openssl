@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	fclose(f);
 
 	if ((key = pkey_read_private(argv[1], "")) == NULL)
-		errx(1, "cannot open private key", argv[1]);
+		errx(1, "cannot open private key %s", argv[1]);
 
 	if ((sign = sign_final(&c, &count, key)) == NULL)
 		errx(1, "cannot finalize signing");

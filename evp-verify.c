@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <openssl/conf.h>
+
 #include "crypto-verify.h"
 
 int main(int argc, char *argv[])
@@ -14,6 +16,8 @@ int main(int argc, char *argv[])
 	struct pkey *key;
 	unsigned char *sign;
 	int status;
+
+	OPENSSL_config(NULL);
 
 	if (argc != 3 || isatty(0))
 		errx(1, "usage:\n\t%s <public-key.pem> <filename> < <signature>", argv[0]);

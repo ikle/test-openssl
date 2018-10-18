@@ -6,3 +6,4 @@ evp-md5sum
 evp-sign
 evp-verify
 bn
+chain-hash

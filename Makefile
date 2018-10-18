@@ -1,4 +1,4 @@
-TARGETS = evp-md5sum evp-bio-md5sum evp-sign evp-verify bn
+TARGETS = evp-md5sum evp-bio-md5sum evp-sign evp-verify bn chain-hash
 
 all: $(TARGETS)
 
@@ -19,3 +19,4 @@ evp-sign: crypto-sign.o
 evp-verify: crypto-verify.o
 
 bn: CFLAGS += $(OPENSSL_CFLAGS)
+chain-hash: CFLAGS += $(OPENSSL_CFLAGS)

@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <openssl/conf.h>
+
 #include "crypto-sign.h"
 
 int main(int argc, char *argv[])
@@ -13,6 +15,8 @@ int main(int argc, char *argv[])
 	size_t count;
 	struct pkey *key;
 	unsigned char *sign;
+
+	OPENSSL_config(NULL);
 
 	if (argc != 3 || isatty(1))
 		errx(1, "usage:\n\t%s <private-key.pem> <filename> > <signature>", argv[0]);

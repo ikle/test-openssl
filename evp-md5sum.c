@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 	EVP_MD_CTX c;
 	unsigned char buf[BUFSIZ];
 	size_t count;
-	int len, i;
+	unsigned len, i;
 	unsigned char hash[EVP_MAX_MD_SIZE];
 
 	if (argc < 2) {

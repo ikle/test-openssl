@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 		EVP_DigestInit_ex(&c, md, NULL);
 
 		/* TODO: check read errors */
-		while (len = BIO_read(b, buf, sizeof(buf)))
+		while ((len = BIO_read(b, buf, sizeof(buf))) > 0)
 			EVP_DigestUpdate(&c, buf, len);
 
 		BIO_free(b);

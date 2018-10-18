@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
 	const EVP_MD *md;
 	EVP_MD_CTX c;
 	unsigned char buf[BUFSIZ];
-	int len, i;
+	int count;
+	unsigned len, i;
 	unsigned char hash[EVP_MAX_MD_SIZE];
 
 	if (argc < 2) {
@@ -28,9 +29,8 @@ int main(int argc, char *argv[])
 		EVP_MD_CTX_init(&c);
 		EVP_DigestInit_ex(&c, md, NULL);
 
-		/* TODO: check read errors */
-		while ((len = BIO_read(b, buf, sizeof(buf))) > 0)
-			EVP_DigestUpdate(&c, buf, len);
+		while ((count = BIO_read(b, buf, sizeof(buf))) > 0)
+			EVP_DigestUpdate(&c, buf, count);
 
 		BIO_free(b);
 

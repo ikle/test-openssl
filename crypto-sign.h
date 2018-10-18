@@ -6,7 +6,7 @@
 
 struct pkey *pkey_read_private(const char *filename, const char *password);
 
-static void pkey_free(struct pkey *key)
+static inline void pkey_free(struct pkey *key)
 {
 	EVP_PKEY_free((void *) key);
 }
@@ -17,7 +17,8 @@ struct sign_ctx {
 
 int sign_init(struct sign_ctx *c, const char *digest);
 
-static int sign_update(struct sign_ctx *c, const void *data, size_t size)
+static inline
+int sign_update(struct sign_ctx *c, const void *data, size_t size)
 {
 	return EVP_SignUpdate(&c->c, data, size);
 }

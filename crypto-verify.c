@@ -37,5 +37,5 @@ int verify_final(struct verify_ctx *c, const void *sign, size_t size,
 	int status = EVP_VerifyFinal(&c->c, sign, size, (void *) key);
 
 	EVP_MD_CTX_cleanup(&c->c);
-	return status;
+	return status == 1;
 }

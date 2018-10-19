@@ -23,8 +23,6 @@ int sign_init(struct sign_ctx *c, const char *digest)
 {
 	const EVP_MD *md;
 
-	OpenSSL_add_all_digests();
-
 	if ((md = EVP_get_digestbyname(digest)) == NULL)
 		return 0;
 

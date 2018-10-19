@@ -2,7 +2,6 @@
 #define _CRYPTO_SIGN_H  1
 
 #include <openssl/evp.h>
-#include <openssl/pem.h>
 
 struct pkey *pkey_read_private(const char *filename, const char *password);
 

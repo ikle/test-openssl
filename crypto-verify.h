@@ -1,10 +1,7 @@
 #ifndef _CRYPTO_VERIFY_H
 #define _CRYPTO_VERIFY_H  1
 
-#include <stddef.h>
-
 #include <openssl/evp.h>
-#include <openssl/pem.h>
 
 struct pkey *pkey_read_public(const char *filename, const char *password);
 

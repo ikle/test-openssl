@@ -31,23 +31,16 @@ int sign_init(struct sign_ctx *c, const char *digest)
 	return EVP_SignInit_ex(&c->c, md, NULL);
 }
 
-void *sign_final(struct sign_ctx *c, size_t *size, struct pkey *key)
+int sign_final(struct sign_ctx *c, void *sign, size_t size, struct pkey *key)
 {
-	void *sign;
-	unsigned len = EVP_PKEY_size((void *) key);
+	unsigned len = size;
 
-	if ((sign = malloc(len)) == NULL)
-		goto no_mem;
+	if (sign == NULL)
+		return EVP_PKEY_size((void *) key);
 
 	if (!EVP_SignFinal(&c->c, sign, &len, (void *) key))
-		goto no_sign;
+		len = 0;
 
 	EVP_MD_CTX_cleanup(&c->c);
-	*size = len;
-	return sign;
-no_sign:
-	free(sign);
-no_mem:
-	EVP_MD_CTX_cleanup(&c->c);
-	return NULL;
+	return len;
 }

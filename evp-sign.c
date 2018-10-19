@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
 	unsigned char buf[BUFSIZ];
 	size_t count;
 	struct pkey *key;
-	unsigned char *sign;
 
 	OPENSSL_config(NULL);
 
@@ -38,13 +37,11 @@ int main(int argc, char *argv[])
 	if ((key = pkey_read_private(argv[2], "")) == NULL)
 		errx(1, "cannot open private key %s", argv[2]);
 
-	if ((sign = sign_final(&c, &count, key)) == NULL)
+	if ((count = sign_final(&c, buf, sizeof (buf), key)) == 0)
 		errx(1, "cannot finalize signing");
 
 	pkey_free(key);
 
-	fwrite(sign, count, 1, stdout);
-	free(sign);
-
+	fwrite(buf, count, 1, stdout);
 	return 0;
 }

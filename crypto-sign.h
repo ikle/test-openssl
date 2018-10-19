@@ -22,6 +22,6 @@ int sign_update(struct sign_ctx *c, const void *data, size_t size)
 	return EVP_SignUpdate(&c->c, data, size);
 }
 
-void *sign_final(struct sign_ctx *c, size_t *size, struct pkey *key);
+int sign_final(struct sign_ctx *c, void *sign, size_t size, struct pkey *key);
 
 #endif  /* _CRYPTO_SIGN_H */

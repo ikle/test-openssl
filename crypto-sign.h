@@ -19,7 +19,7 @@ static inline void pkey_free (struct pkey *key)
 }
 
 struct sign_ctx {
-	EVP_MD_CTX c;
+	EVP_MD_CTX *c;
 };
 
 int sign_init (struct sign_ctx *c, const char *digest);
@@ -27,7 +27,7 @@ int sign_init (struct sign_ctx *c, const char *digest);
 static inline
 int sign_update (struct sign_ctx *c, const void *data, size_t size)
 {
-	return EVP_SignUpdate (&c->c, data, size);
+	return EVP_SignUpdate (c->c, data, size);
 }
 
 int sign_final (struct sign_ctx *c, void *sign, size_t size, struct pkey *key);

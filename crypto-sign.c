@@ -13,6 +13,11 @@
 
 #include "crypto-sign.h"
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define EVP_MD_CTX_new   EVP_MD_CTX_create
+#define EVP_MD_CTX_free  EVP_MD_CTX_destroy
+#endif
+
 struct pkey *pkey_read_private (const char *filename, const char *password)
 {
 	FILE *f;
@@ -34,9 +39,10 @@ int sign_init (struct sign_ctx *c, const char *digest)
 	if ((md = EVP_get_digestbyname (digest)) == NULL)
 		return 0;
 
-	EVP_MD_CTX_init (&c->c);
+	if ((c->c = EVP_MD_CTX_new ()) == NULL)
+		return 0;
 
-	return EVP_SignInit_ex (&c->c, md, NULL);
+	return EVP_SignInit_ex (c->c, md, NULL);
 }
 
 int sign_final (struct sign_ctx *c, void *sign, size_t size, struct pkey *key)
@@ -46,9 +52,9 @@ int sign_final (struct sign_ctx *c, void *sign, size_t size, struct pkey *key)
 	if (sign == NULL)
 		return EVP_PKEY_size ((void *) key);
 
-	if (!EVP_SignFinal (&c->c, sign, &len, (void *) key))
+	if (!EVP_SignFinal (c->c, sign, &len, (void *) key))
 		len = 0;
 
-	EVP_MD_CTX_cleanup (&c->c);
+	EVP_MD_CTX_free (c->c);
 	return len;
 }

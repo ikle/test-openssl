@@ -1,3 +1,11 @@
+/*
+ * OpenSSL EVP Digest Test
+ *
+ * Copyright (c) 2015-2025 Alexei A. Smekalkine <ikle@ikle.ru>
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 #include <stdio.h>
 #include <openssl/evp.h>
 

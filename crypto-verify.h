@@ -24,7 +24,7 @@ static inline size_t pkey_size(struct pkey *key)
 }
 
 struct verify_ctx {
-	EVP_MD_CTX c;
+	EVP_MD_CTX *c;
 };
 
 int verify_init (struct verify_ctx *c, const char *digest);
@@ -32,7 +32,7 @@ int verify_init (struct verify_ctx *c, const char *digest);
 static inline
 int verify_update (struct verify_ctx *c, const void *data, size_t size)
 {
-	return EVP_VerifyUpdate (&c->c, data, size);
+	return EVP_VerifyUpdate (c->c, data, size);
 }
 
 int verify_final (struct verify_ctx *c, const void *sign, size_t size,

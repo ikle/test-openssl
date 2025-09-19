@@ -14,6 +14,11 @@
 
 #include "crypto-verify.h"
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define EVP_MD_CTX_new   EVP_MD_CTX_create
+#define EVP_MD_CTX_free  EVP_MD_CTX_destroy
+#endif
+
 struct pkey *pkey_read_public (const char *filename, const char *password)
 {
 	FILE *f;
@@ -46,16 +51,17 @@ int verify_init (struct verify_ctx *c, const char *digest)
 	if ((md = EVP_get_digestbyname (digest)) == NULL)
 		return 0;
 
-	EVP_MD_CTX_init (&c->c);
+	if ((c->c = EVP_MD_CTX_new ()) == NULL)
+		return 0;
 
-	return EVP_VerifyInit_ex (&c->c, md, NULL);
+	return EVP_VerifyInit_ex (c->c, md, NULL);
 }
 
 int verify_final (struct verify_ctx *c, const void *sign, size_t size,
 		  struct pkey *key)
 {
-	int status = EVP_VerifyFinal (&c->c, sign, size, (void *) key);
+	int status = EVP_VerifyFinal (c->c, sign, size, (void *) key);
 
-	EVP_MD_CTX_cleanup (&c->c);
+	EVP_MD_CTX_free (c->c);
 	return status == 1;
 }

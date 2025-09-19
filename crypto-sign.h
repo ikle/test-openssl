@@ -1,27 +1,35 @@
-#ifndef _CRYPTO_SIGN_H
-#define _CRYPTO_SIGN_H  1
+/*
+ * OpenSSL Crypto Sign Helpers
+ *
+ * Copyright (c) 2015-2025 Alexei A. Smekalkine <ikle@ikle.ru>
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+#ifndef CRYPTO_SIGN_H
+#define CRYPTO_SIGN_H  1
 
 #include <openssl/evp.h>
 
-struct pkey *pkey_read_private(const char *filename, const char *password);
+struct pkey *pkey_read_private (const char *filename, const char *password);
 
-static inline void pkey_free(struct pkey *key)
+static inline void pkey_free (struct pkey *key)
 {
-	EVP_PKEY_free((void *) key);
+	EVP_PKEY_free ((void *) key);
 }
 
 struct sign_ctx {
 	EVP_MD_CTX c;
 };
 
-int sign_init(struct sign_ctx *c, const char *digest);
+int sign_init (struct sign_ctx *c, const char *digest);
 
 static inline
-int sign_update(struct sign_ctx *c, const void *data, size_t size)
+int sign_update (struct sign_ctx *c, const void *data, size_t size)
 {
-	return EVP_SignUpdate(&c->c, data, size);
+	return EVP_SignUpdate (&c->c, data, size);
 }
 
-int sign_final(struct sign_ctx *c, void *sign, size_t size, struct pkey *key);
+int sign_final (struct sign_ctx *c, void *sign, size_t size, struct pkey *key);
 
-#endif  /* _CRYPTO_SIGN_H */
+#endif  /* CRYPTO_SIGN_H */

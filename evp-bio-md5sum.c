@@ -10,11 +10,16 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define EVP_MD_CTX_new   EVP_MD_CTX_create
+#define EVP_MD_CTX_free  EVP_MD_CTX_destroy
+#endif
+
 int main (int argc, char *argv[])
 {
 	BIO *b;
 	const EVP_MD *md;
-	EVP_MD_CTX c;
+	EVP_MD_CTX *c;
 	unsigned char buf[BUFSIZ];
 	int count;
 	unsigned len, i;
@@ -34,16 +39,20 @@ int main (int argc, char *argv[])
 			return 1;
 		}
 
-		EVP_MD_CTX_init (&c);
-		EVP_DigestInit_ex (&c, md, NULL);
+		if ((c = EVP_MD_CTX_new ()) == NULL) {
+			fprintf (stderr, "E: Cannot allocate digest context\n");
+			return 1;
+		}
+
+		EVP_DigestInit_ex (c, md, NULL);
 
 		while ((count = BIO_read (b, buf, sizeof(buf))) > 0)
-			EVP_DigestUpdate (&c, buf, count);
+			EVP_DigestUpdate (c, buf, count);
 
 		BIO_free (b);
 
-		EVP_DigestFinal_ex (&c, hash, &len);
-		EVP_MD_CTX_cleanup (&c);
+		EVP_DigestFinal_ex (c, hash, &len);
+		EVP_MD_CTX_free (c);
 
 		for (i = 0; i < len; ++i)
 			printf ("%02x", hash[i]);

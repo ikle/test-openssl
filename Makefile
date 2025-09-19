@@ -11,12 +11,8 @@ install: $(TARGETS)
 	install -D -d $(DESTDIR)/$(PREFIX)/bin
 	install -s -m 0755 $^ $(DESTDIR)/$(PREFIX)/bin
 
-OPENSSL_CFLAGS = `pkg-config openssl --cflags --libs`
+CFLAGS += `pkg-config openssl --cflags`
+LDLIBS += `pkg-config openssl --libs`
 
-evp-md5sum evp-bio-md5sum: CFLAGS += $(OPENSSL_CFLAGS)
-evp-sign evp-verify: CFLAGS += $(OPENSSL_CFLAGS)
 evp-sign: crypto-sign.o
 evp-verify: crypto-verify.o
-
-bn: CFLAGS += $(OPENSSL_CFLAGS)
-chain-hash: CFLAGS += $(OPENSSL_CFLAGS)

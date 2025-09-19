@@ -1,3 +1,11 @@
+/*
+ * OpenSSL Crypto Verify Test
+ *
+ * Copyright (c) 2015-2025 Alexei A. Smekalkine <ikle@ikle.ru>
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 #include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +15,7 @@
 
 #include "crypto-verify.h"
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	FILE *f;
 	struct verify_ctx c;
@@ -17,37 +25,37 @@ int main(int argc, char *argv[])
 	unsigned char *sign;
 	int status;
 
-	OPENSSL_config(NULL);
+	OPENSSL_config (NULL);
 
-	if (argc != 4 || isatty(0))
-		errx(1, "usage:\n"
-			"\t%s <digest> <public-key.pem> <filename> < <signature>",
-			argv[0]);
+	if (argc != 4 || isatty (0))
+		errx (1, "usage:\n"
+			 "\t%s <digest> <public-key.pem> <filename> < <signature>",
+			 argv[0]);
 
-	if (!verify_init(&c, argv[1]))
-		errx(1, "cannot initialize digest context");
+	if (!verify_init (&c, argv[1]))
+		errx (1, "cannot initialize digest context");
 
-	if ((f = fopen(argv[3], "rb")) == NULL)
-		err(1, "%s", argv[3]);
+	if ((f = fopen (argv[3], "rb")) == NULL)
+		err (1, "%s", argv[3]);
 
 	/* TODO: check read errors */
-	while ((count = fread(buf, 1, sizeof(buf), f)) > 0)
-		verify_update(&c, buf, count);
+	while ((count = fread (buf, 1, sizeof(buf), f)) > 0)
+		verify_update (&c, buf, count);
 
-	fclose(f);
+	fclose (f);
 
-	if ((key = pkey_read_public(argv[2], "")) == NULL)
-		errx(1, "cannot open public key %s", argv[2]);
+	if ((key = pkey_read_public (argv[2], "")) == NULL)
+		errx (1, "cannot open public key %s", argv[2]);
 
-	if ((sign = malloc(pkey_size(key))) == NULL)
-		err(1, "cannot allocate key storage");
+	if ((sign = malloc (pkey_size (key))) == NULL)
+		err (1, "cannot allocate key storage");
 
-	count = fread(sign, 1, pkey_size(key), stdin);
+	count = fread (sign, 1, pkey_size (key), stdin);
 
-	status = verify_final(&c, sign, count, key);
+	status = verify_final (&c, sign, count, key);
 
-	pkey_free(key);
-	free(sign);
+	pkey_free (key);
+	free (sign);
 
 	return status ? 0 : 1;
 }

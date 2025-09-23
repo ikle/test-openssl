@@ -28,8 +28,7 @@ struct pkey *pkey_read_public (const char *filename, const char *password)
 	if ((f = fopen (filename, "rb")) == NULL)
 		return NULL;
 
-	key = PEM_read_PUBKEY (f, NULL, NULL, (void *) password);
-	if (key != NULL)
+	if ((key = PEM_read_PUBKEY (f, NULL, NULL, (void *) password)) != NULL)
 		goto out;
 
 	rewind (f);

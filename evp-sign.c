@@ -11,9 +11,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <openssl/conf.h>
-
 #include "crypto-sign.h"
+#include "evp-core.h"
 
 int main (int argc, char *argv[])
 {
@@ -23,11 +22,7 @@ int main (int argc, char *argv[])
 	size_t count;
 	struct pkey *key;
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-	OPENSSL_config (NULL);
-#else
-	OPENSSL_init_crypto (OPENSSL_INIT_LOAD_CONFIG, NULL);
-#endif
+	evp_init ();
 
 	if (argc != 4 || isatty (1))
 		errx (1, "usage:\n"

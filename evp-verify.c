@@ -33,7 +33,7 @@ static int verify_file (const char *path, struct evp_pkey *key,
 		if (!evp_verify_update (o, buf, count))
 			goto no_update;
 
-	ok = evp_verify_final (o, sign, len);
+	ok = !ferror (in) && evp_verify_final (o, sign, len);
 no_update:
 	fclose (in);
 no_file:

@@ -16,15 +16,16 @@ struct evp_pkey;
 #define evp_key(o)  (EVP_PKEY *) (o)
 #define evp_mdc(o)  (EVP_MD_CTX *) (o)
 
-static inline
-struct evp_verify *evp_verify_open (const struct evp_pkey *key)
+static inline struct evp_verify *
+evp_verify_open (const char *digest, const struct evp_pkey *key)
 {
 	EVP_MD_CTX *c;
 
 	if ((c = EVP_MD_CTX_new ()) == NULL)
 		return NULL;
 
-	if (EVP_DigestVerifyInit (c, NULL, NULL, NULL, evp_key (key)) == 1)
+	if (EVP_DigestVerifyInit (c, NULL, EVP_get_digestbyname (digest),
+				  NULL, evp_key (key)) == 1)
 		return (void *) c;
 
 	EVP_MD_CTX_free (c);

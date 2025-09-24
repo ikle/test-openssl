@@ -23,7 +23,7 @@ static int verify_file (const char *path, struct evp_pkey *key,
 	size_t count;
 	int ok = 0;
 
-	if ((o = evp_verify_open (key)) == NULL)
+	if ((o = evp_verify_open (NULL, key)) == NULL)
 		return 0;
 
 	if ((in = fopen (path, "rb")) == NULL)

@@ -24,8 +24,13 @@ evp_verify_open (const char *digest, const struct evp_pkey *key)
 	if ((c = EVP_MD_CTX_new ()) == NULL)
 		return NULL;
 
+#if OPENSSL_VERSION_NUMBER < 0x30000000L
 	if (EVP_DigestVerifyInit (c, NULL, EVP_get_digestbyname (digest),
 				  NULL, evp_key (key)) == 1)
+#else
+	if (EVP_DigestVerifyInit_ex (c, NULL, digest, NULL, NULL,
+				     evp_key (key), NULL) == 1)
+#endif
 		return (void *) c;
 
 	EVP_MD_CTX_free (c);

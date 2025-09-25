@@ -9,9 +9,7 @@
 #ifndef EVP_VERIFY_NG_H
 #define EVP_VERIFY_NG_H  1
 
-#include "evp-core.h"
-
-struct evp_pkey;
+#include "evp-pkey.h"
 
 #define evp_key(o)  (EVP_PKEY *) (o)
 #define evp_mdc(o)  (EVP_MD_CTX *) (o)

@@ -11,14 +11,24 @@ $
 
 # Generating GOST keys
 
+Generate key pair:
 ```
 $ openssl genpkey -algorithm gost2001 -pkeyopt paramset:A -out gost-privkey.pem
+$ openssl pkey -in gost-privkey.pem -pubout -out gost-pubkey.pem
+```
+
+Show result:
+```
 $ openssl pkey -in gost-privkey.pem -text -noout
+$ openssl pkey -pubin -in gost-pubkey.pem -text -noout
+```
+
+Generate certificate and extract public key from it:
+```
 $ openssl req -new -x509 -days 365 -key gost-privkey.pem -out gost-ca.pem \
   -subj "/C=RU/ST=Russia/L=Spb/O=Ikle Org/OU=Ikle CA/CN=Ikle CA Root"
 $ openssl x509 -in gost-ca.pem -text -noout
 $ openssl x509 -inform pem -in gost-ca.pem -pubkey -noout > gost-pubkey.pem
-$ openssl pkey -inform pem -pubin -in gost-pubkey.pem -text -noout
 ```
 
 Where `-inform pem` for pkey and x509 subcommands are optional.

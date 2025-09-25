@@ -11,8 +11,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <evp/verify.h>
+
 #include "crypto-verify.h"
-#include "evp-verify-ng.h"
 
 static int verify_file (const char *path, struct evp_pkey *key,
 			const void *sign, size_t len)

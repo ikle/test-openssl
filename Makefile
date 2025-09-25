@@ -11,6 +11,7 @@ install: $(TARGETS)
 	install -D -d $(DESTDIR)/$(PREFIX)/bin
 	install -s -m 0755 $^ $(DESTDIR)/$(PREFIX)/bin
 
+CFLAGS += -I$(CURDIR)/include
 CFLAGS += `pkg-config openssl --cflags`
 LDLIBS += `pkg-config openssl --libs`
 

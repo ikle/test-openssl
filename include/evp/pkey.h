@@ -12,8 +12,7 @@
 #include <stdio.h>
 
 #include <openssl/pem.h>
-
-#include "evp-core.h"
+#include <evp/core.h>
 
 struct evp_pkey *evp_pkey_read_private (FILE *from, const char *pass)
 {

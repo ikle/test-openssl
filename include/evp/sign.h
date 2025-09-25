@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef EVP_SIGN_NG_H
-#define EVP_SIGN_NG_H  1
+#ifndef EVP_SIGN_H
+#define EVP_SIGN_H  1
 
-#include "evp-pkey.h"
+#include <evp/pkey.h>
 
 #define evp_key(o)  (EVP_PKEY *) (o)
 #define evp_mdc(o)  (EVP_MD_CTX *) (o)
@@ -55,4 +55,4 @@ static inline void evp_sign_close (struct evp_sign *o)
 #undef evp_mdc
 #undef evp_key
 
-#endif  /* EVP_SIGN_NG_H */
+#endif  /* EVP_SIGN_H */

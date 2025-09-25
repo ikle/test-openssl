@@ -11,8 +11,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <evp/core.h>
+
 #include "crypto-sign.h"
-#include "evp-core.h"
 
 int main (int argc, char *argv[])
 {

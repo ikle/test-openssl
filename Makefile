@@ -1,4 +1,5 @@
 TARGETS = evp-md5sum evp-bio-md5sum evp-sign evp-verify bn chain-hash
+TARGETS += evp-digest
 
 all: $(TARGETS)
 

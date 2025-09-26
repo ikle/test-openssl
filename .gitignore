@@ -4,6 +4,7 @@
 *.patch
 evp-bio-md5sum
 evp-md5sum
+evp-digest
 evp-sign
 evp-verify
 bn
